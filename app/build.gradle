@@ -1,0 +1,118 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: "de.mannodermaus.android-junit5"
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+android {
+    compileSdkVersion build_versions.target_sdk
+    buildToolsVersion build_versions.build_tools
+    defaultConfig {
+        applicationId "com.natuan.currencyconverterapp"
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+    def END_POINT = "END_POINT"
+    def ACCESS_KEY = "ACCESS_KEY"
+
+    flavorDimensions "free"
+    productFlavors {
+        dev {
+            applicationIdSuffix ".dev"
+            resValue "string", "app_name", "[DEV] Currency Converter"
+            buildConfigField "String", END_POINT, "\"${END_POINT_DEV}\""
+            buildConfigField "String", ACCESS_KEY, "\"${ACCESS_KEY}\""
+        }
+        stagg {
+            applicationIdSuffix ".stagg"
+            resValue "string", "app_name", "[Stag] Currency Converter"
+            buildConfigField "String", END_POINT, "\"${END_POINT_STAGG}\""
+            buildConfigField "String", ACCESS_KEY, "\"${ACCESS_KEY}\""
+        }
+        live {
+            dimension "free"
+            resValue "string", "app_name", "Currency Converter"
+            buildConfigField "String", END_POINT, "\"${END_POINT_PRODUCT}\""
+            buildConfigField "String", ACCESS_KEY, "\"${ACCESS_KEY}\""
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    sourceSets {
+        androidTest.java.srcDirs += "src/test-common/java"
+        test.java.srcDirs += "src/test-common/java"
+    }
+    testOptions {
+        junitPlatform {
+            // Configure JUnit 5 tests here
+        }
+        unitTests.all {
+            testLogging {
+                events "skipped", "passed", "failed"
+            }
+        }
+    }
+    packagingOptions {
+        exclude "META-INF/LICENSE.md"
+        exclude "META-INF/LICENSE-notice.md"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
+    implementation "androidx.appcompat:appcompat:$versions.appcompat"
+    implementation "com.google.android.material:material:$versions.material"
+    implementation "androidx.core:core-ktx:$versions.core_ktx"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
+
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+    implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3_logging"
+
+    implementation "com.jakewharton.timber:timber:$versions.timber"
+
+    implementation "androidx.room:room-runtime:$versions.room"
+    kapt "androidx.room:room-compiler:$versions.room"
+
+    implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
+    kapt "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle"
+
+    implementation "com.google.dagger:dagger:$versions.dagger"
+    implementation "com.google.dagger:dagger-android:$versions.dagger"
+    implementation "com.google.dagger:dagger-android-support:$versions.dagger"
+    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
+    kapt "com.google.dagger:dagger-android-processor:$versions.dagger"
+
+    implementation "androidx.work:work-runtime:$versions.work"
+    implementation "me.yokeyword:fragmentationx:$versions.fragmentationx"
+
+    implementation "com.facebook.stetho:stetho:$versions.stetho"
+    implementation "com.facebook.stetho:stetho-okhttp3:$versions.stetho"
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$versions.junit_jupiter"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$versions.junit_jupiter"
+    testImplementation "org.assertj:assertj-core:$versions.assertj_core"
+
+    androidTestImplementation "androidx.test:runner:$versions.atsl_runner"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
+}
