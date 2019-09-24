@@ -1,14 +1,18 @@
-package com.natuan.currencyconverterapp.di
+package com.natuan.currencyconverterapp.di.module
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.natuan.currencyconverterapp.BuildConfig
 import com.natuan.currencyconverterapp.data.remote.CurrencyLayerService
+import com.natuan.currencyconverterapp.data.remote.RequestInterceptor
+import com.natuan.currencyconverterapp.helper.LiveDataCallAdapterFactory
+import com.natuan.currencyconverterapp.helper.RatesFactory
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 /**
@@ -18,15 +22,22 @@ import javax.inject.Singleton
 @Module
 class NetworkModule {
 
-    private val END_POINT = "${BuildConfig.END_POINT}"
+    private val END_POINT = BuildConfig.END_POINT
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder().add(RatesFactory()).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(moshi: Moshi): Retrofit {
         return Retrofit.Builder()
             .baseUrl(END_POINT)
             .client(createClient())
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .build()
     }
 

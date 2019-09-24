@@ -36,19 +36,19 @@ android {
             applicationIdSuffix ".dev"
             resValue "string", "app_name", "[DEV] Currency Converter"
             buildConfigField "String", END_POINT, "\"${END_POINT_DEV}\""
-            buildConfigField "String", ACCESS_KEY, "\"${ACCESS_KEY}\""
+            buildConfigField "String", ACCESS_KEY, "\"${KEY}\""
         }
         stagg {
             applicationIdSuffix ".stagg"
             resValue "string", "app_name", "[Stag] Currency Converter"
             buildConfigField "String", END_POINT, "\"${END_POINT_STAGG}\""
-            buildConfigField "String", ACCESS_KEY, "\"${ACCESS_KEY}\""
+            buildConfigField "String", ACCESS_KEY, "\"${KEY}\""
         }
         live {
             dimension "free"
             resValue "string", "app_name", "Currency Converter"
             buildConfigField "String", END_POINT, "\"${END_POINT_PRODUCT}\""
-            buildConfigField "String", ACCESS_KEY, "\"${ACCESS_KEY}\""
+            buildConfigField "String", ACCESS_KEY, "\"${KEY}\""
         }
     }
 
@@ -80,14 +80,21 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
+
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
     implementation "com.google.android.material:material:$versions.material"
     implementation "androidx.core:core-ktx:$versions.core_ktx"
+    implementation "androidx.fragment:fragment-ktx:$versions.fragment_ktx"
     implementation "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
+    implementation "androidx.percentlayout:percentlayout:$versions.percentlayout"
 
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-moshi:$versions.retrofit"
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3_logging"
+    implementation "com.squareup.moshi:moshi-kotlin:$versions.moshi_kotlin"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$versions.moshi_kotlin"
 
     implementation "com.jakewharton.timber:timber:$versions.timber"
 
@@ -115,4 +122,8 @@ dependencies {
 
     androidTestImplementation "androidx.test:runner:$versions.atsl_runner"
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
+}
+
+androidExtensions {
+    experimental = true
 }

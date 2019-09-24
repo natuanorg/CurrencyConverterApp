@@ -2,6 +2,8 @@ package com.natuan.currencyconverterapp.di
 
 import android.app.Application
 import com.natuan.currencyconverterapp.CurrencyConverterApp
+import com.natuan.currencyconverterapp.di.module.AppModule
+import com.natuan.currencyconverterapp.di.module.MainActivityModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -15,7 +17,8 @@ import javax.inject.Singleton
 @Component(
     modules = [
         AndroidInjectionModule::class,
-        AppModule::class
+        AppModule::class,
+        MainActivityModule::class
     ]
 )
 interface AppComponent {

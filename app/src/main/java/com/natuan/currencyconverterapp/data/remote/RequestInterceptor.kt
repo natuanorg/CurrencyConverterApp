@@ -1,11 +1,8 @@
-package com.natuan.currencyconverterapp.di
+package com.natuan.currencyconverterapp.data.remote
 
 import com.natuan.currencyconverterapp.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.Response
-import okhttp3.HttpUrl
-
-
 
 /**
  * Created by natuanorg on 2019-09-19.

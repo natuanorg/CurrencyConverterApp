@@ -1,4 +1,4 @@
-package com.natuan.currencyconverterapp.di
+package com.natuan.currencyconverterapp.di.viewmodel
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey

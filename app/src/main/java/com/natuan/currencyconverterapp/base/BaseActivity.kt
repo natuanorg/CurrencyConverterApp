@@ -15,6 +15,8 @@ abstract class BaseActivity : SupportActivity(), HasSupportFragmentInjector {
 
     abstract fun getLayoutResource() : Int
 
+    abstract fun initViews(savedInstanceState: Bundle?)
+
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
 
@@ -23,6 +25,7 @@ abstract class BaseActivity : SupportActivity(), HasSupportFragmentInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutResource())
+        initViews(savedInstanceState)
     }
 }
 

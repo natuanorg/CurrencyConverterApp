@@ -3,8 +3,11 @@ package com.natuan.currencyconverterapp
 import android.app.Activity
 import android.app.Application
 import android.app.Service
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.facebook.stetho.Stetho
 import com.natuan.currencyconverterapp.di.AppInjector
+import com.natuan.currencyconverterapp.di.worker.WorkerFactory
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.HasServiceInjector
@@ -23,12 +26,15 @@ class CurrencyConverterApp : Application(), HasActivityInjector, HasServiceInjec
     @Inject
     lateinit var dispatchingServiceInjector: DispatchingAndroidInjector<Service>
 
+    @Inject
+    lateinit var workerFactory: WorkerFactory
+
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-        Stetho.initializeWithDefaults(this);
+        Stetho.initializeWithDefaults(this)
 
         Fragmentation.builder()
             .stackViewMode(Fragmentation.BUBBLE)
@@ -36,6 +42,9 @@ class CurrencyConverterApp : Application(), HasActivityInjector, HasServiceInjec
             .install()
 
         AppInjector.init(this)
+
+        val config = Configuration.Builder().setWorkerFactory(workerFactory).build()
+        WorkManager.initialize(this, config)
     }
 
     override fun activityInjector() = dispatchingAndroidInjector
